@@ -1,0 +1,421 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem}
+.ucf-badge{background:#231f20;color:#ffc904;font-size:11px;font-weight:500;padding:4px 10px;border-radius:99px;letter-spacing:.5px}
+.header-title{font-size:17px;font-weight:500;color:var(--color-text-primary)}
+.header-sub{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.tabs{display:flex;gap:2px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:1.5rem}
+.tab{padding:8px 16px;font-size:13px;color:var(--color-text-secondary);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-.5px}
+.tab.active{color:var(--color-text-primary);border-bottom:2px solid #ffc904;font-weight:500}
+.section{display:none}.section.active{display:block}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.25rem}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.metric-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px}
+.metric-val{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.filter-row{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.filter-row input,.filter-row select{font-size:13px;padding:7px 10px;border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans)}
+.filter-row input{flex:1;min-width:160px}
+.filter-row select{min-width:160px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{text-align:left;font-weight:500;font-size:11px;color:var(--color-text-secondary);padding:7px 9px;border-bottom:.5px solid var(--color-border-tertiary);white-space:nowrap}
+tbody td{padding:8px 9px;border-bottom:.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:middle}
+tbody tr:hover{background:var(--color-background-secondary)}
+.badge{display:inline-block;padding:2px 7px;border-radius:99px;font-size:10.5px;font-weight:500}
+.b-open{background:#EAF3DE;color:#3B6D11}
+.b-review{background:#FAEEDA;color:#854F0B}
+.b-closed{background:#F1EFE8;color:#5F5E5A}
+.b-urgent{background:#FCEBEB;color:#A32D2D}
+.b-pending{background:#E6F1FB;color:#185FA5}
+.type-tag{font-size:10.5px;color:var(--color-text-secondary);background:var(--color-background-secondary);padding:2px 6px;border-radius:4px;white-space:nowrap}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg.full{grid-column:1/-1}
+label{font-size:12px;color:var(--color-text-secondary)}
+input,select,textarea{width:100%;padding:7px 10px;font-size:13px;border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans)}
+textarea{resize:vertical;min-height:64px}
+.btn-row{display:flex;gap:8px;margin-top:1rem}
+.btn-primary{padding:8px 18px;border-radius:var(--border-radius-md);background:#231f20;color:#ffc904;border:none;font-size:13px;font-weight:500;cursor:pointer}
+.btn-sec{padding:8px 18px;border-radius:var(--border-radius-md);background:none;color:var(--color-text-secondary);border:.5px solid var(--color-border-secondary);font-size:13px;cursor:pointer}
+.chart-row{display:grid;grid-template-columns:240px 1fr;gap:1.5rem;align-items:start}
+.legend-list{display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.li{display:flex;align-items:center;gap:8px;font-size:12px}
+.ld{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.ln{flex:1;color:var(--color-text-primary)}
+.lc{font-weight:500;color:var(--color-text-primary);min-width:18px;text-align:right}
+.lp{color:var(--color-text-secondary);font-size:11px;min-width:30px;text-align:right}
+.sec-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:.75rem}
+.info-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:1rem;font-size:12.5px;color:var(--color-text-secondary);line-height:1.6}
+.info-card strong{color:var(--color-text-primary);font-weight:500}
+.toast{display:none;background:#231f20;color:#ffc904;padding:9px 14px;border-radius:var(--border-radius-md);font-size:12px;position:fixed;bottom:20px;right:20px;z-index:99}
+.detail-panel{display:none;background:var(--color-background-primary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-top:.75rem}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:12.5px;margin-top:.75rem}
+.dk{color:var(--color-text-secondary)}
+.dv{color:var(--color-text-primary);font-weight:500}
+.role-tag{font-size:10px;color:var(--color-text-secondary);background:var(--color-background-secondary);padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle}
+</style>
+
+<div class="wrap">
+  <div class="header">
+    <span class="ucf-badge">UCF SG</span>
+    <div>
+      <div class="header-title">SCAI Case Tracker — Judicial Council</div>
+      <div class="header-sub">Student Conduct & Academic Integrity · Judicial Branch, Student Union Rm 346 · (407) 823-3291</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="sw('log')">Case log</button>
+    <button class="tab" onclick="sw('submit')">Submit / assign case</button>
+    <button class="tab" onclick="sw('stats')">Distribution & stats</button>
+    <button class="tab" onclick="sw('ref')">Quick reference</button>
+  </div>
+
+  <!-- LOG -->
+  <div id="tab-log" class="section active">
+    <div class="metrics" id="metrics"></div>
+    <div class="filter-row">
+      <input type="text" id="srch" placeholder="Search case ID, petitioner, topic..." oninput="rt()">
+      <select id="fj" onchange="rt()"><option value="">All members</option></select>
+      <select id="ft" onchange="rt()">
+        <option value="">All case topics</option>
+        <option>Impartial Advising</option>
+        <option>Student Grade Appeal</option>
+        <option>Fiscal Administrative Appeal</option>
+        <option>Election Violation Appeal</option>
+        <option>Student Conduct Appeal</option>
+      </select>
+      <select id="fs" onchange="rt()">
+        <option value="">All statuses</option>
+        <option>Open</option><option>Under Review</option><option>Pending Hearing</option><option>Closed</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Case ID</th><th>Petitioner</th><th>Case topic</th><th>Assigned to</th><th>Date assigned</th><th>Hearing date</th><th>Status</th><th></th></tr></thead>
+        <tbody id="ct"></tbody>
+      </table>
+    </div>
+    <div class="detail-panel" id="dp"></div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div id="tab-submit" class="section">
+    <div class="info-card">
+      <strong>Case assignment protocol</strong> — SCAI cases are forwarded to the Judicial Council by the Chief Justice or designee. Members are assigned based on availability and case type. Members must recuse themselves from any case where a conflict of interest exists per the Code of Conduct.
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label>Case ID (auto-generated if blank)</label><input id="f-id" placeholder="e.g. SCAI-2025-0042"></div>
+      <div class="fg"><label>Petitioner</label>
+        <select id="f-pet">
+          <option value="">— Select petitioner —</option>
+          <option>Student A</option><option>Student B</option><option>Student C</option><option>Student D</option>
+          <option>Student E</option><option>Student F</option><option>Student G</option><option>Student H</option>
+          <option>Student I</option><option>Student J</option><option>Student K</option><option>Student L</option>
+          <option>Student M</option><option>Student N</option><option>Student O</option><option>Student P</option>
+          <option>Student Q</option><option>Student R</option><option>Student S</option><option>Student T</option>
+        </select>
+      </div>
+      <div class="fg"><label>Case topic</label>
+        <select id="f-type">
+          <option value="">— Select topic —</option>
+          <option>Impartial Advising</option>
+          <option>Student Grade Appeal</option>
+          <option>Fiscal Administrative Appeal</option>
+          <option>Election Violation Appeal</option>
+          <option>Student Conduct Appeal</option>
+        </select>
+      </div>
+      <div class="fg"><label>Assign to</label><select id="f-just"><option value="">— Select member —</option></select></div>
+      <div class="fg"><label>Date assigned</label><input type="date" id="f-assigned"></div>
+      <div class="fg"><label>Hearing date (if applicable)</label><input type="date" id="f-hear"></div>
+      <div class="fg"><label>Status</label>
+        <select id="f-stat">
+          <option>Open</option><option>Under Review</option><option>Pending Hearing</option><option>Closed</option>
+        </select>
+      </div>
+      <div class="fg"><label>Relevant regulation</label>
+        <select id="f-reg">
+          <option value="">— Select if applicable —</option>
+          <option>Golden Rule – Student Code of Conduct</option>
+          <option>Title V – Student Body Statutes</option>
+          <option>UCF Parking Regulations</option>
+          <option>Academic Integrity Policy</option>
+          <option>RSO Financial Regulations</option>
+          <option>Election Code</option>
+          <option>Student Body Constitution – Article IV</option>
+        </select>
+      </div>
+      <div class="fg full"><label>Case summary</label><textarea id="f-sum" placeholder="Brief description of the issue, relevant facts, and what relief is being sought..."></textarea></div>
+      <div class="fg full"><label>Procedural notes / conflicts of interest declared</label><textarea id="f-notes" placeholder="Recusal notices, related cases, prior rulings, deadlines, communication log..."></textarea></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="submitCase()">Assign case</button>
+      <button class="btn-sec" onclick="clearForm()">Clear</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div id="tab-stats" class="section">
+    <div class="sec-title">Case load by council member</div>
+    <div class="chart-row">
+      <div style="position:relative;height:280px"><canvas id="pieChart" role="img" aria-label="Doughnut chart of SCAI cases by council member"></canvas></div>
+      <div id="lgd" class="legend-list"></div>
+    </div>
+    <div style="margin-top:1.75rem">
+      <div class="sec-title">Cases by topic</div>
+      <div style="position:relative;height:200px"><canvas id="typeChart" role="img" aria-label="Bar chart of cases by topic"></canvas></div>
+    </div>
+    <div style="margin-top:1.75rem">
+      <div class="sec-title">Monthly filings (2024–25 academic year)</div>
+      <div style="position:relative;height:180px"><canvas id="monthChart" role="img" aria-label="Bar chart of monthly case filings"></canvas></div>
+    </div>
+  </div>
+
+  <!-- REFERENCE -->
+  <div id="tab-ref" class="section">
+    <div class="sec-title">Council roster</div>
+    <div class="info-card">
+      <strong>Chief Justice</strong> — Presides over the full Council; delegates cases to ACJs or Associate Justices; acts as counsel to all committees (no vote unless breaking a tie); maintains training materials; notifies Council of all membership changes within 5 academic days.<br><br>
+      <strong>External Assistant Chief Justice</strong> — Manages outreach and external communications; coordinates with the student body, SGLC/JLC, and UCF officials; assumes CJ responsibilities if Internal ACJ seat is vacant.<br><br>
+      <strong>Internal Assistant Chief Justice</strong> — Oversees internal operations, committee coordination, and communication between the CJ and Associate Justices.<br><br>
+      <strong>Associate Justices (Seats 1–14)</strong> — Voting members of the Judicial Council. Serve on appellate hearings, provide impartial advising, participate in judicial review, and serve on at least one standing committee.
+    </div>
+    <div class="sec-title">Case topics</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.25rem">
+      <div class="info-card" style="margin-bottom:0"><strong>Impartial Advising</strong><br>Justices serve as neutral guides for students navigating the SCAI conduct or grade appeal process. Advisory only — no hearing required.</div>
+      <div class="info-card" style="margin-bottom:0"><strong>Student Grade Appeal</strong><br>Students disputing a final course grade. Justices may serve as advisors or panelists on the Grade Appeals Board.</div>
+      <div class="info-card" style="margin-bottom:0"><strong>Fiscal Administrative Appeal</strong><br>RSOs or students appealing A&SF allocation decisions, budget freezes, or financial sanctions.</div>
+      <div class="info-card" style="margin-bottom:0"><strong>Election Violation Appeal</strong><br>Challenges to SG candidate eligibility or alleged election code violations. Often expedited due to election timelines.</div>
+      <div class="info-card" style="margin-bottom:0" style="grid-column:1/-1"><strong>Student Conduct Appeal</strong><br>Referrals from UCF's SCAI office for formal hearings involving Golden Rule or Student Code of Conduct violations.</div>
+    </div>
+    <div class="sec-title">Standing committees</div>
+    <div class="info-card">
+      <strong>Internal Rules Committee (IRC)</strong> — Reviews and proposes amendments to the Judicial Rules of Procedure.<br>
+      <strong>Precedent Committee</strong> — Maintains and organizes the Council's case precedent library.<br>
+      <strong>Judicial Experience Committee (JEC)</strong> — Coordinates professional development, study resources, and branch culture.<br>
+      <strong>Judicial Outreach Committee (JOC)</strong> — Runs awareness programs educating the student body on their rights and SG judicial processes.
+    </div>
+    <div class="sec-title">Key contacts</div>
+    <div class="info-card">
+      <strong>External ACJ:</strong> sgjcexternal@ucf.edu &nbsp;|&nbsp; <strong>Internal ACJ:</strong> sgjcinternal@ucf.edu<br>
+      <strong>SCAI office:</strong> scai@ucf.edu · (407) 823-4638 · Ferrell Commons, Rm 227<br>
+      <strong>Judicial Branch:</strong> (407) 823-3291 · Student Union, Rm 346
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const MEMBERS=[
+  {label:'Chief Justice',short:'Chief Justice',role:'cj'},
+  {label:'External Asst. Chief Justice',short:'External ACJ',role:'acj'},
+  {label:'Internal Asst. Chief Justice',short:'Internal ACJ',role:'acj'},
+  {label:'Associate Justice – Seat 1',short:'Seat 1',role:'aj'},
+  {label:'Associate Justice – Seat 2',short:'Seat 2',role:'aj'},
+  {label:'Associate Justice – Seat 3',short:'Seat 3',role:'aj'},
+  {label:'Associate Justice – Seat 4',short:'Seat 4',role:'aj'},
+  {label:'Associate Justice – Seat 5',short:'Seat 5',role:'aj'},
+  {label:'Associate Justice – Seat 6',short:'Seat 6',role:'aj'},
+  {label:'Associate Justice – Seat 7',short:'Seat 7',role:'aj'},
+  {label:'Associate Justice – Seat 8',short:'Seat 8',role:'aj'},
+  {label:'Associate Justice – Seat 9',short:'Seat 9',role:'aj'},
+  {label:'Associate Justice – Seat 10',short:'Seat 10',role:'aj'},
+  {label:'Associate Justice – Seat 11',short:'Seat 11',role:'aj'},
+  {label:'Associate Justice – Seat 12',short:'Seat 12',role:'aj'},
+  {label:'Associate Justice – Seat 13',short:'Seat 13',role:'aj'},
+  {label:'Associate Justice – Seat 14',short:'Seat 14',role:'aj'},
+];
+
+const TYPES=['Impartial Advising','Student Grade Appeal','Fiscal Administrative Appeal','Election Violation Appeal','Student Conduct Appeal'];
+const COLORS=['#378ADD','#1D9E75','#D85A30','#BA7517','#D4537E','#639922','#7F77DD','#E24B4A','#888780','#5DCAA5','#EF9F27','#F09595','#AFA9EC','#97C459','#63B8FF','#FFD580','#FF8C69'];
+
+const PETS=['Student A','Student B','Student C','Student D','Student E','Student F','Student G','Student H','Student I','Student J','Student K','Student L','Student M','Student N','Student O','Student P','Student Q','Student R','Student S','Student T'];
+
+let cases=[
+  {id:'SCAI-2025-001',pet:'Student A',type:'Impartial Advising',justice:'Associate Justice – Seat 1',assigned:'2025-08-12',hearing:'',status:'Closed',reg:'',sum:'Student sought advising on rights during conduct meeting.',notes:'Advisory only.'},
+  {id:'SCAI-2025-002',pet:'Student B',type:'Student Conduct Appeal',justice:'Associate Justice – Seat 2',assigned:'2025-08-19',hearing:'2025-09-03',status:'Closed',reg:'Golden Rule – Student Code of Conduct',sum:'Academic dishonesty allegation during midterm.',notes:'Formal hearing required.'},
+  {id:'SCAI-2025-003',pet:'Student C',type:'Student Grade Appeal',justice:'Associate Justice – Seat 3',assigned:'2025-09-04',hearing:'2025-09-18',status:'Closed',reg:'Academic Integrity Policy',sum:'Disputed final grade in CHM 2045.',notes:''},
+  {id:'SCAI-2025-004',pet:'Student D',type:'Fiscal Administrative Appeal',justice:'Associate Justice – Seat 4',assigned:'2025-09-10',hearing:'2025-09-25',status:'Closed',reg:'RSO Financial Regulations',sum:'RSO appealing A&SF allocation reduction.',notes:''},
+  {id:'SCAI-2025-005',pet:'Student E',type:'Impartial Advising',justice:'Associate Justice – Seat 1',assigned:'2025-10-01',hearing:'',status:'Closed',reg:'',sum:'Pre-hearing advising for conduct case.',notes:'Advisory only.'},
+  {id:'SCAI-2025-006',pet:'Student F',type:'Election Violation Appeal',justice:'External Asst. Chief Justice',assigned:'2025-10-15',hearing:'2025-10-22',status:'Closed',reg:'Election Code',sum:'Candidate eligibility challenge ahead of SG elections.',notes:'Expedited per election timeline.'},
+  {id:'SCAI-2025-007',pet:'Student G',type:'Student Conduct Appeal',justice:'Associate Justice – Seat 5',assigned:'2025-10-28',hearing:'2025-11-07',status:'Closed',reg:'Golden Rule – Student Code of Conduct',sum:'Alleged harassment between residents.',notes:''},
+  {id:'SCAI-2025-008',pet:'Student H',type:'Student Grade Appeal',justice:'Associate Justice – Seat 6',assigned:'2025-11-03',hearing:'2025-11-19',status:'Closed',reg:'Academic Integrity Policy',sum:'Grade dispute in EGN 3310.',notes:''},
+  {id:'SCAI-2025-009',pet:'Student I',type:'Fiscal Administrative Appeal',justice:'Associate Justice – Seat 7',assigned:'2025-11-14',hearing:'2025-12-02',status:'Closed',reg:'RSO Financial Regulations',sum:'Appeal of budget freeze following audit.',notes:''},
+  {id:'SCAI-2025-010',pet:'Student J',type:'Student Conduct Appeal',justice:'Associate Justice – Seat 2',assigned:'2025-12-01',hearing:'2025-12-10',status:'Closed',reg:'Golden Rule – Student Code of Conduct',sum:'Constitutional review of SG senate bill.',notes:'Full council convened.'},
+  {id:'SCAI-2025-011',pet:'Student K',type:'Impartial Advising',justice:'Associate Justice – Seat 8',assigned:'2026-01-13',hearing:'',status:'Closed',reg:'',sum:'Advising on grade appeal process navigation.',notes:'Advisory only.'},
+  {id:'SCAI-2025-012',pet:'Student L',type:'Student Grade Appeal',justice:'Associate Justice – Seat 3',assigned:'2026-01-20',hearing:'2026-02-03',status:'Closed',reg:'Academic Integrity Policy',sum:'Advised student on rights during conduct meeting.',notes:''},
+  {id:'SCAI-2025-013',pet:'Student M',type:'Student Conduct Appeal',justice:'Associate Justice – Seat 9',assigned:'2026-02-03',hearing:'2026-02-20',status:'Under Review',reg:'Golden Rule – Student Code of Conduct',sum:'Alleged academic misconduct — contract cheating.',notes:'Expert review requested.'},
+  {id:'SCAI-2025-014',pet:'Student N',type:'Fiscal Administrative Appeal',justice:'Associate Justice – Seat 10',assigned:'2026-02-10',hearing:'2026-02-25',status:'Under Review',reg:'RSO Financial Regulations',sum:'Appeal of fiscal sanction following compliance review.',notes:''},
+  {id:'SCAI-2025-015',pet:'Student O',type:'Student Grade Appeal',justice:'Associate Justice – Seat 1',assigned:'2026-02-17',hearing:'2026-03-04',status:'Pending Hearing',reg:'Academic Integrity Policy',sum:'Grade dispute in MAC 2312 — attendance policy.',notes:''},
+  {id:'SCAI-2025-016',pet:'Student P',type:'Impartial Advising',justice:'Associate Justice – Seat 11',assigned:'2026-02-24',hearing:'',status:'Open',reg:'',sum:'Student seeking pre-hearing advising for conduct case.',notes:''},
+  {id:'SCAI-2025-017',pet:'Student Q',type:'Election Violation Appeal',justice:'Chief Justice',assigned:'2026-03-10',hearing:'2026-03-17',status:'Closed',reg:'Election Code',sum:'Spring election eligibility challenge.',notes:'Resolved — candidate qualified.'},
+  {id:'SCAI-2025-018',pet:'Student R',type:'Student Conduct Appeal',justice:'Associate Justice – Seat 12',assigned:'2026-03-18',hearing:'2026-04-08',status:'Pending Hearing',reg:'Golden Rule – Student Code of Conduct',sum:'Alleged unauthorized computer access.',notes:'Digital evidence review pending.'},
+  {id:'SCAI-2025-019',pet:'Student S',type:'Impartial Advising',justice:'Internal Asst. Chief Justice',assigned:'2026-04-01',hearing:'',status:'Open',reg:'',sum:'Student seeking advising before grade appeal submission.',notes:''},
+  {id:'SCAI-2025-020',pet:'Student T',type:'Student Grade Appeal',justice:'Associate Justice – Seat 13',assigned:'2026-04-07',hearing:'2026-04-22',status:'Open',reg:'Academic Integrity Policy',sum:'Disputed grade in BSC 2010 — lab component.',notes:'Hearing scheduled.'},
+];
+let nxt=21;
+
+function populateDropdowns(){
+  ['f-just','fj'].forEach(id=>{
+    const el=document.getElementById(id);
+    MEMBERS.forEach(m=>{
+      const o=document.createElement('option');
+      o.value=m.label;
+      o.textContent=m.label;
+      el.appendChild(o);
+    });
+  });
+}
+
+function renderMetrics(){
+  const total=cases.length,
+    open=cases.filter(c=>['Open','Pending Hearing'].includes(c.status)).length,
+    review=cases.filter(c=>c.status==='Under Review').length,
+    closed=cases.filter(c=>c.status==='Closed').length;
+  document.getElementById('metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Total cases</div><div class="metric-val">${total}</div></div>
+    <div class="metric"><div class="metric-label">Open / pending</div><div class="metric-val">${open}</div></div>
+    <div class="metric"><div class="metric-label">Under review</div><div class="metric-val">${review}</div></div>
+    <div class="metric"><div class="metric-label">Closed</div><div class="metric-val">${closed}</div></div>`;
+}
+
+function sbadge(s){
+  const m={Open:'b-open','Under Review':'b-review','Pending Hearing':'b-pending',Closed:'b-closed'};
+  return`<span class="badge ${m[s]||'b-closed'}">${s}</span>`;
+}
+
+function shortMember(label){
+  const m=MEMBERS.find(x=>x.label===label);
+  return m?m.short:label;
+}
+
+function rt(){
+  const q=document.getElementById('srch').value.toLowerCase(),
+    fj=document.getElementById('fj').value,
+    ft=document.getElementById('ft').value,
+    fs=document.getElementById('fs').value;
+  const fil=cases.filter(c=>
+    (!q||[c.id,c.pet,c.type,c.justice,c.sum].join(' ').toLowerCase().includes(q))&&
+    (!fj||c.justice===fj)&&(!ft||c.type===ft)&&(!fs||c.status===fs));
+  const tb=document.getElementById('ct');
+  document.getElementById('dp').style.display='none';
+  if(!fil.length){tb.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-secondary)">No cases match current filters.</td></tr>`;return;}
+  tb.innerHTML=fil.map(c=>`<tr style="cursor:pointer" onclick="showDetail('${c.id}')">
+    <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)">${c.id}</span></td>
+    <td style="font-weight:500">${c.pet}</td>
+    <td><span class="type-tag">${c.type}</span></td>
+    <td style="font-size:12px">${shortMember(c.justice)}</td>
+    <td style="color:var(--color-text-secondary);font-size:12px">${c.assigned}</td>
+    <td style="color:var(--color-text-secondary);font-size:12px">${c.hearing||'—'}</td>
+    <td>${sbadge(c.status)}</td>
+    <td style="color:var(--color-text-secondary);font-size:11px">▶</td>
+  </tr>`).join('');
+}
+
+function showDetail(id){
+  const c=cases.find(x=>x.id===id);if(!c)return;
+  const dp=document.getElementById('dp');
+  dp.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center">
+    <span style="font-weight:500;font-size:13px">${c.id} — ${c.type}</span>
+    <button class="btn-sec" style="font-size:11px;padding:4px 10px" onclick="document.getElementById('dp').style.display='none'">Close</button>
+  </div>
+  <div class="detail-grid">
+    <div><span class="dk">Petitioner</span><br><span class="dv">${c.pet}</span></div>
+    <div><span class="dk">Assigned to</span><br><span class="dv">${c.justice}</span></div>
+    <div><span class="dk">Status</span><br>${sbadge(c.status)}</div>
+    <div><span class="dk">Date assigned</span><br><span class="dv">${c.assigned}</span></div>
+    <div><span class="dk">Hearing date</span><br><span class="dv">${c.hearing||'Not scheduled'}</span></div>
+    <div><span class="dk">Relevant regulation</span><br><span class="dv">${c.reg||'N/A'}</span></div>
+    <div class="full"><span class="dk">Case summary</span><br><span class="dv" style="font-weight:400">${c.sum}</span></div>
+    ${c.notes?`<div class="full"><span class="dk">Procedural notes</span><br><span class="dv" style="font-weight:400">${c.notes}</span></div>`:''}
+  </div>`;
+  dp.style.display='block';
+}
+
+function submitCase(){
+  const pet=document.getElementById('f-pet').value,
+    type=document.getElementById('f-type').value,
+    just=document.getElementById('f-just').value;
+  if(!pet||!type||!just){alert('Please select a petitioner, case topic, and assigned member.');return;}
+  const fid=document.getElementById('f-id').value.trim();
+  const adate=document.getElementById('f-assigned').value||new Date().toISOString().slice(0,10);
+  cases.unshift({
+    id:fid||`SCAI-2026-${String(nxt++).padStart(3,'0')}`,
+    pet,type,justice:just,assigned:adate,
+    hearing:document.getElementById('f-hear').value||'',
+    status:document.getElementById('f-stat').value,
+    reg:document.getElementById('f-reg').value,
+    sum:document.getElementById('f-sum').value.trim(),
+    notes:document.getElementById('f-notes').value.trim()
+  });
+  clearForm();renderMetrics();rt();
+  toast('Case assigned successfully');sw('log');
+}
+
+function clearForm(){
+  ['f-id','f-sum','f-notes'].forEach(id=>document.getElementById(id).value='');
+  ['f-pet','f-type','f-just','f-reg','f-stat'].forEach(id=>document.getElementById(id).value=document.getElementById(id).options[0].value);
+  document.getElementById('f-hear').value='';
+  document.getElementById('f-assigned').value='';
+}
+
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
+
+let pc,tc,mc;
+function renderCharts(){
+  const counts={};
+  MEMBERS.forEach(m=>counts[m.label]=0);
+  cases.forEach(c=>{if(counts[c.justice]!==undefined)counts[c.justice]++;});
+  const labs=MEMBERS.filter(m=>counts[m.label]>0).map(m=>m.label);
+  const data=labs.map(l=>counts[l]);
+  const total=data.reduce((a,b)=>a+b,0);
+  const cols=labs.map((_,i)=>COLORS[i%COLORS.length]);
+
+  if(pc)pc.destroy();
+  pc=new Chart(document.getElementById('pieChart'),{
+    type:'doughnut',
+    data:{labels:labs.map(l=>shortMember(l)),datasets:[{data,backgroundColor:cols,borderWidth:2,borderColor:'transparent'}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'50%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed} cases (${Math.round(ctx.parsed/total*100)}%)`}}}}
+  });
+
+  const lgd=document.getElementById('lgd');
+  const sorted=[...labs.map((l,i)=>({l,d:data[i],c:cols[i]}))].sort((a,b)=>b.d-a.d);
+  lgd.innerHTML=sorted.map(({l,d,c})=>`<div class="li"><span class="ld" style="background:${c}"></span><span class="ln">${shortMember(l)}</span><span class="lc">${d}</span><span class="lp">${Math.round(d/total*100)}%</span></div>`).join('');
+
+  const tcounts={};TYPES.forEach(t=>tcounts[t]=0);
+  cases.forEach(c=>{if(tcounts[c.type]!==undefined)tcounts[c.type]++;});
+  const tlabs=Object.keys(tcounts);
+  const shortTypes=['Impartial\nAdvising','Grade\nAppeal','Fiscal\nAppeal','Election\nAppeal','Conduct\nAppeal'];
+
+  if(tc)tc.destroy();
+  tc=new Chart(document.getElementById('typeChart'),{
+    type:'bar',
+    data:{labels:shortTypes,datasets:[{data:tlabs.map(t=>tcounts[t]),backgroundColor:'#378ADD',borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}},x:{ticks:{autoSkip:false,font:{size:11}}}}}
+  });
+
+  const months=['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr'];
+  const mmap={'2025-08':0,'2025-09':1,'2025-10':2,'2025-11':3,'2025-12':4,'2026-01':5,'2026-02':6,'2026-03':7,'2026-04':8};
+  const mc2=new Array(9).fill(0);
+  cases.forEach(c=>{const k=c.assigned.slice(0,7);if(mmap[k]!==undefined)mc2[mmap[k]]++;});
+
+  if(mc)mc.destroy();
+  mc=new Chart(document.getElementById('monthChart'),{
+    type:'bar',
+    data:{labels:months,datasets:[{data:mc2,backgroundColor:'#1D9E75',borderRadius:3,label:'Cases assigned'}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}},x:{ticks:{autoSkip:false}}}}
+  });
+}
+
+function sw(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['log','submit','stats','ref'][i]===name));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='stats')setTimeout(renderCharts,50);
+}
+
+populateDropdowns();renderMetrics();rt();
+</script>
